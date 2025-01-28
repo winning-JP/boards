@@ -80,3 +80,4 @@ target/
 
 # IPython
 profile_default
+.env
