@@ -23,7 +23,6 @@ build/
 *.spec
 staticfiles/
 
-
 # Poetry specific
 poetry.lock
 
@@ -81,3 +80,4 @@ target/
 # IPython
 profile_default
 .env
+.DS_Store

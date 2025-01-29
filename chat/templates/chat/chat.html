@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Chat Room
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Chat Room</h2>
+    <div id="chat-log" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;">
+      {% for message in messages %}
+        <p>
+          <strong>{{ message.user.username }}:</strong> {{ message.content }}
+          <small class="text-muted">{{ message.timestamp }}</small>
+        </p>
+      {% endfor %}
+    </div>
+    <form id="chat-form" class="d-flex">
+      <input id="chat-message-input" type="text" class="form-control me-2" placeholder="Type your message here" />
+      <button id="chat-message-submit" type="button" class="btn btn-primary">Send</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const chatInput = document.getElementById('chat-message-input')
+      const chatSubmit = document.getElementById('chat-message-submit')
+    
+      function sendMessage() {
+        const message = chatInput.value.trim()
+        if (message === '') return // 空のメッセージは送信しない
+    
+        fetch('/chat/send_message/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify({ message: message })
+        })
+          .then((response) => response.json())
+          .then(() => {
+            chatInput.value = '' // 入力フィールドをクリア
+            window.location.reload() // 送信後にページをリロード
+          })
+      }
+    
+      // ボタンのクリックで送信
+      chatSubmit.addEventListener('click', sendMessage)
+    
+      // エンターキーで送信
+      chatInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          // エンターキーが押された場合
+          event.preventDefault() // フォームのデフォルト送信を防ぐ
+          sendMessage() // メッセージ送信
+        }
+      })
+    })
+  </script>
+{% endblock %}

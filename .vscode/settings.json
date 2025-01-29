@@ -8,5 +8,14 @@
     ],
     "python.defaultInterpreterPath": "./venv/bin/python",
     "editor.defaultFormatter": "ms-python.black-formatter",
+    "[dotenv]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[ignore]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[django-html]": {
+        "editor.defaultFormatter": "junstyle.vscode-django-support"
+    },
 
 }

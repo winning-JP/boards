@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <script>
+        function fetchMessages() {
+            fetch("/chat/get_messages/")
+                .then(response => response.json())
+                .then(data => {
+                    const chatLog = document.querySelector("#chat-log");
+                    chatLog.innerHTML = "";  // 一旦クリア
+                    data.forEach(msg => {
+                        chatLog.innerHTML += `<p><strong>${msg.user}:</strong> ${msg.content} <small>${msg.timestamp}</small></p>`;
+                    });
+                });
+        }
+
+        function sendMessage() {
+            const messageInput = document.querySelector("#chat-message-input");
+            const message = messageInput.value;
+            if (message.trim() === "") return;
+
+            fetch("/chat/send_message/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({"message": message})
+            }).then(response => response.json())
+              .then(() => {
+                  messageInput.value = "";  // 入力欄をクリア
+                  fetchMessages();  // メッセージリストを更新
+              });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchMessages();  // 初回データ取得
+            setInterval(fetchMessages, 2000);  // 2秒ごとに新しいメッセージを取得
+
+            document.querySelector("#chat-message-submit").onclick = sendMessage;
+        });
+    </script>
+</head>
+<body>
+    <h2>Chat Room</h2>
+    <div id="chat-log">
+        {% for message in messages %}
+            <p><strong>{{ message.user.username }}:</strong> {{ message.content }} <small>{{ message.timestamp }}</small></p>
+        {% endfor %}
+    </div>
+    <input id="chat-message-input" type="text">
+    <button id="chat-message-submit">Send</button>
+</body>
+</html>
