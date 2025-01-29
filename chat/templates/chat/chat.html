@@ -6,7 +6,7 @@
 
 {% block content %}
   <div class="container mt-4">
-    <h2>Chat Room</h2>
+    <h2>ちゃっと</h2>
     <div id="chat-log" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;">
       {% for message in messages %}
         <p>
@@ -16,10 +16,10 @@
       {% endfor %}
     </div>
     <form id="chat-form" class="d-flex">
-      <input id="chat-message-input" type="text" class="form-control me-2" placeholder="Type your message here" />
-      <button id="chat-message-submit" type="button" class="btn btn-primary">Send</button>
+      <input id="chat-message-input" type="text" class="form-control me-2" />
+      <button id="chat-message-submit" type="button" class="btn btn-primary">送信</button>
     </form>
-    <p id="error-message" class="text-danger mt-2"></p> <!-- エラー表示用 -->
+    <p id="error-message" class="text-danger mt-2"></p>
   </div>
 
   <script>
@@ -50,7 +50,7 @@
             return response.json()
           })
           .then(() => {
-            window.location.reload() // 送信後にページをリロード
+            window.location.reload()
           })
           .catch((error) => {
             errorMessage.textContent = 'Error: ' + error.message
